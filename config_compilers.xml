@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config_compilers version="2.0">
+
+<compiler MACH="snellius" COMPILER="intel">
+	<!-- WORK IN PROGRESS -->
+</compiler>
+
+
+<compiler MACH="snellius" COMPILER="gnu">
+  <!-- http://gcc.gnu.org/onlinedocs/gfortran/ -->
+  <CFLAGS>
+    <base> -std=gnu99 -march=native</base>
+    <append compile_threaded="true"> -fopenmp </append>
+    <append DEBUG="TRUE"> -g -Wall -Og -fbacktrace -ffpe-trap=invalid,zero,overflow -fcheck=bounds </append>
+    <append DEBUG="FALSE"> -O </append>
+  </CFLAGS>
+  <CXX_LINKER>FORTRAN</CXX_LINKER>
+  <FFLAGS>
+    <base>  -fconvert=big-endian -ffree-line-length-none -ffixed-line-length-none -fallow-argument-mismatch -fallow-invalid-boz -march=native</base>
+    <append compile_threaded="true"> -fopenmp </append>
+    <append DEBUG="TRUE"> -g -Wall -Og -fbacktrace -ffpe-trap=zero,overflow -fcheck=bounds </append>
+    <append DEBUG="FALSE"> -O </append>
+  </FFLAGS>
+  <FC_AUTO_R8>
+    <base> -fdefault-real-8 </base>
+  </FC_AUTO_R8>
+  <FFLAGS_NOOPT>
+    <base> -O0 </base>
+  </FFLAGS_NOOPT>
+  <LDFLAGS>
+    <append compile_threaded="true"> -fopenmp </append>
+  </LDFLAGS>
+ 
+  <MPICC>mpicc</MPICC>
+  <MPIFC>mpif90</MPIFC>
+  <MPICXX>mpicxx</MPICXX>
+
+  <SCC> gcc </SCC>
+  <SCXX> g++ </SCXX>
+  <SFC> gfortran </SFC>
+
+  <SUPPORTS_CXX>TRUE</SUPPORTS_CXX>
+
+  <NETCDF_C_PATH>/sw/arch/Centos8/EB_production/2021/software/netCDF/4.8.0-gompi-2021a/</NETCDF_C_PATH>
+  <NETCDF_FORTRAN_PATH>/sw/arch/Centos8/EB_production/2021/software/netCDF-Fortran/4.5.3-gompi-2021a/</NETCDF_FORTRAN_PATH>
+
+  <CONFIG_ARGS>
+    <base> --host=Linux </base>
+  </CONFIG_ARGS>
+  <CPPDEFS>
+    <append> -DLINUX </append>
+  </CPPDEFS>
+  <SLIBS>
+  <append>-lnetcdf -lnetcdff -lflexiblas</append>-->
+  </SLIBS>
+
+</compiler>
+
+
+
+<compiler MACH="cartesius">
+  <CFLAGS>
+   <!-- Haswell and Broadwell ONLY! -->
+    <append> -qopt-report -xCORE_AVX2 -no-fma</append>
+  </CFLAGS>
+  <FFLAGS>
+   <!-- Haswell and Broadwell ONLY! -->
+    <append> -qopt-report -xCORE_AVX2 -no-fma</append>
+  </FFLAGS>
+ 
+  <MPICC>mpiicc</MPICC>
+  <MPIFC>mpiifort</MPIFC>
+  <MPICXX>mpicpc</MPICXX>
+
+<!--  <NETCDF_PATH>/home/kampe004/bin/netcdf/</NETCDF_PATH> -->
+<!--  <PNETCDF_PATH>/home/kampe004/bin/pnetcdf2/</PNETCDF_PATH> --> 
+  <NETCDF_C_PATH>/sw/arch/RedHatEnterpriseServer7/EB_production/2019/software/netCDF/4.6.1-intel-2018b/</NETCDF_C_PATH>
+  <NETCDF_FORTRAN_PATH>/sw/arch/RedHatEnterpriseServer7/EB_production/2019/software/netCDF-Fortran/4.4.4-intel-2018b/</NETCDF_FORTRAN_PATH>
+  <PNETCDF_PATH>/sw/arch/RedHatEnterpriseServer7/EB_production/2019/software/PnetCDF/1.10.0-intel-2018b/lib</PNETCDF_PATH>
+
+  <CONFIG_ARGS>
+    <base> --host=Linux </base>
+  </CONFIG_ARGS>
+  <CPPDEFS>
+    <append> -DLINUX </append>
+  </CPPDEFS>
+  <SLIBS>
+  <append>-lnetcdf -lnetcdff</append>-->
+<!--  <append>-L/home/kampe004/bin/netcdf/lib/ -lnetcdf -lnetcdff -L$(SURFSARA_MKL_LIB) </append>-->
+<!--  <append>-L$(MKLROOT)/lib/ </append> -->
+<!--  <append>-L/home/kampe004/bin/pnetcdf2/lib -lpnetcdf </append> -->
+  </SLIBS>
+
+  <CPPDEFS>
+    <append MPILIB="impi"> -DINTEL_MKL </append>
+  </CPPDEFS>
+</compiler>
+
+</config_compilers>

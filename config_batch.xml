@@ -1,0 +1,39 @@
+<config_batch version="2.1">
+
+  <batch_system MACH="cartesius" type="slurm" >
+    <batch_submit>sbatch</batch_submit>
+    <submit_args>
+      <arg flag="--time" name="$JOB_WALLCLOCK_TIME"/>
+      <arg flag="-p" name="$JOB_QUEUE"/>
+    </submit_args>
+    <directives>
+       <directive>--constraint=haswell</directive>
+       <directive>--mail-type=ALL</directive>
+       <directive>--mail-user=L.vankampenhout@uu.nl</directive>
+    </directives>
+    <queues>
+      <queue walltimemax="5-00:00:00" nodemin="1" nodemax="2000">normal</queue>
+      <queue walltimemax="01:00:00" nodemin="1" nodemax="100" default="true">short</queue>
+      <queue walltimemax="5-00:00:00" nodemin="1" nodemax="177" >broadwell</queue> <!-- LvK: need dedicated compilation on broadwell node-->
+    </queues>
+  </batch_system>
+
+  <batch_system MACH="snellius" type="slurm" >
+    <batch_submit>sbatch</batch_submit>
+    <submit_args>
+      <arg flag="--time" name="$JOB_WALLCLOCK_TIME"/>
+      <arg flag="-p" name="$JOB_QUEUE"/>
+    </submit_args>
+    <directives>
+       <directive>--mail-type=ALL</directive>
+       <directive>--mail-user=L.vankampenhout@uu.nl</directive>
+    </directives>
+    <queues>
+      <queue walltimemax="5-00:00:00" nodemin="1" nodemax="200" default="true">thin</queue> <!-- LvK: 256 GB mem per node-->
+      <queue walltimemax="5-00:00:00" nodemin="1" nodemax="200">fat</queue> <!-- LvK: 1 TiB mem per node-->
+      <queue walltimemax="5-00:00:00" nodemin="1" nodemax="200">himem4gb</queue> <!-- LvK: 4 TiB mem per node-->
+      <queue walltimemax="5-00:00:00" nodemin="1" nodemax="200">himem8gb</queue> <!-- LvK: 8 TiB mem per node-->
+    </queues>
+  </batch_system>
+
+</config_batch>

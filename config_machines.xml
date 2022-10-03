@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<!-- This is an ordered list, not all fields are required, optional fields are noted below. -->
+<config_machines version="2.0">
+<!-- MACH is the name that you will use in machine options -->
+  <machine MACH="snellius">
+
+    <!-- DESC: a text description of the machine, this field is current not used in code-->
+    <DESC>Snellius supercomputer,  batch system is SLURM</DESC>
+
+    <NODENAME_REGEX>.*snellius.surf.nl</NODENAME_REGEX>
+
+    <!-- OS: the operating system of this machine. Passed to cppflags for
+	 compiled programs as -DVALUE  recognized are LINUX, AIX, Darwin, CNL -->
+    <OS>LINUX</OS>
+
+	<!-- COMPILERS: compilers supported on this machine, comma seperated list, first is default -->
+    <COMPILERS>gnu,intel</COMPILERS>
+
+	<!-- MPILIBS: mpilibs supported on this machine, comma seperated list,
+	     first is default, mpi-serial is assumed and not required in this list-->
+    <MPILIBS>gompi</MPILIBS>
+
+    <!-- PROJECT: A project or account number used for batch jobs
+         This value is used for directory names. If different from
+         actual accounting project id, use CHARGE_ACCOUNT
+	 can be overridden in environment or $HOME/.cime/config -->
+    <PROJECT>SH-284</PROJECT>
+
+    <!-- CHARGE_ACCOUNT: A project or account number used for batch jobs
+	 This is the actual project used for cost accounting set in
+         the batch script (ex. #PBS -A charge_account). Will default
+         to PROJECT if not set.
+	 can be overridden in environment or $HOME/.cime/config -->
+    <CHARGE_ACCOUNT>ncuuh284</CHARGE_ACCOUNT>
+
+    <!-- CIME_OUTPUT_ROOT: Base directory for case output,
+	 the case/bld and case/run directories are written below here -->
+    <CIME_OUTPUT_ROOT>/projects/0/uuesm2/</CIME_OUTPUT_ROOT>
+
+    <!-- DIN_LOC_ROOT: location of the inputdata data directory
+	 inputdata is downloaded automatically on a case by case basis as
+	 long as the user has write access to this directory.   We recommend that
+	 all cime model users on a system share an inputdata directory
+	 as it can be quite large -->
+    <DIN_LOC_ROOT>/projects/0/uuesm2/inputdata</DIN_LOC_ROOT>
+
+    <!-- DIN_LOC_ROOT_CLMFORC: override of DIN_LOC_ROOT specific to CLM
+	 forcing data -->
+    <!-- LvK
+    <DIN_LOC_ROOT_CLMFORC>/home/kampe004/data/atm/datm7</DIN_LOC_ROOT_CLMFORC>
+    <DIN_LOC_ROOT_CLMFORC>$ENV{CESMDATAROOT}/lmwg</DIN_LOC_ROOT_CLMFORC>
+    -->
+
+    <!-- DOUT_S_ROOT: root directory of short term archive files, short term
+      archiving moves model output data out of the run directory, but
+      keeps it on disk-->
+    <DOUT_S_ROOT>$CIME_OUTPUT_ROOT/archive/$CASE</DOUT_S_ROOT>
+
+    <!-- BASELINE_ROOT:  Root directory for system test baseline files -->
+    <BASELINE_ROOT>$ENV{CESMDATAROOT}/cesm_baselines</BASELINE_ROOT>
+
+    <!-- CCSM_CPRNC: location of the cprnc tool, compares model output in testing-->
+    <CCSM_CPRNC>/home/kampe004/cesm/archive/cesm1_1_2/models/lnd/clm/tools/cprnc/cprnc</CCSM_CPRNC> 
+
+    <!-- GMAKE_J: optional number of threads to pass to the gmake flag -->
+    <GMAKE_J>32</GMAKE_J>
+
+    <!-- <EXE_ROOT>/home/kampe004/cesm_bld/$CASE/bld</EXE_ROOT> -->
+
+    <!-- BATCH_SYSTEM: batch system used on this machine,
+      supported values are: none, cobalt, lsf, pbs, slurm -->
+    <BATCH_SYSTEM>slurm</BATCH_SYSTEM>
+
+    <!-- SUPPORTED_BY: contact information for support for this system
+      this field is not used in code -->
+    <SUPPORTED_BY>Leo van Kampenhout</SUPPORTED_BY>
+
+    <!-- MAX_TASKS_PER_NODE: maximum number of threads*tasks per
+	 shared memory node on this machine,
+	 should always be >= MAX_MPITASKS_PER_NODE -->
+    <MAX_TASKS_PER_NODE>256</MAX_TASKS_PER_NODE>
+
+    <!-- MAX_MPITASKS_PER_NODE: number of physical PES per shared node on
+	 this machine, in practice the MPI tasks per node will not exceed this value -->
+    <MAX_MPITASKS_PER_NODE>128</MAX_MPITASKS_PER_NODE>
+
+    <!-- PROJECT_REQUIRED: Does this machine require a project to be specified to
+	 the batch system?  See PROJECT above -->
+    <PROJECT_REQUIRED>FALSE</PROJECT_REQUIRED>
+
+    <!-- mpirun: The mpi exec to start a job on this machine, supported values
+	 are values listed in MPILIBS above, default and mpi-serial -->
+    <mpirun mpilib="default">
+      <executable>srun</executable>
+      <arguments>
+	<arg name="ntasks"> -n {{ total_tasks }} </arg>
+      </arguments>
+    </mpirun>
+ 
+
+    <module_system type="module" >
+    <!-- <module_system type="module" allow_error="true"> Works in CESM 2.0.1 but not 2.0.0 -->
+      <init_path lang="sh">/usr/share/Modules/init/sh</init_path>
+      <init_path lang="csh">/usr/share/Modules/init/csh</init_path>
+      <init_path lang="perl">/usr/share/Modules/init/perl.pm</init_path>
+      <init_path lang="python">/usr/share/Modules/python.py</init_path>
+
+      <cmd_path lang="perl">modulecmd perl</cmd_path>
+      <cmd_path lang="python">/usr/share/lmod/8.2.7/libexec/lmod python</cmd_path>
+      <cmd_path lang="sh">module</cmd_path>
+      <cmd_path lang="csh">module</cmd_path>
+
+      <modules>
+	<command name="load">2021</command>
+	<command name="load">CMake/3.20.1-GCCcore-10.3.0</command>
+	<command name="load">netCDF-Fortran/4.5.3-gompi-2021a</command>
+	<command name="load">netCDF/4.8.0-gompi-2021a</command>
+	<!-- <command name="load">ScaLAPACK/2.1.0-gompi-2021a-fb</command> -->
+	<command name="load">FlexiBLAS/3.0.4-GCC-10.3.0</command>
+	<command name="load">NCO/5.0.1-foss-2021a</command>
+      </modules>
+    </module_system>
+
+
+   <!-- environment variables, a blank entry will unset a variable -->
+    <environment_variables>
+      <env name="OMP_STACKSIZE">256M</env>
+      <env name="MPI_TYPE_DEPTH">16</env>
+      <!-- <env name="MPI_IB_CONGESTED">1</env> -->
+      <!-- <env name="MPI_USE_ARRAY"/> -->
+      <!--<env name="NETCDF">/home/kampe004/bin/netcdf/</env>
+      <env name="LD_RUN_PATH">/home/kampe004/bin/pnetcdf2/lib</env>-->
+    </environment_variables>
+
+    <!-- resource settings as defined in https://docs.python.org/2/library/resource.html -->
+    <resource_limits>
+      <resource name="RLIMIT_STACK">-1</resource>
+    </resource_limits>
+  </machine>
+</config_machines>
